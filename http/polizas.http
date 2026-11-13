@@ -1,0 +1,68 @@
+### Peticiones de ejemplo (IntelliJ HTTP Client: abrir este archivo y pulsar ▶ en cada petición)
+@base = http://localhost:8080
+@apiKey = 123456
+
+### 1. Listar todas las pólizas
+GET {{base}}/polizas
+x-api-key: {{apiKey}}
+
+### 2. Listar pólizas por tipo y estado
+GET {{base}}/polizas?tipo=COLECTIVA&estado=ACTIVA
+x-api-key: {{apiKey}}
+
+### 3. Listar riesgos de una póliza
+GET {{base}}/polizas/2/riesgos
+x-api-key: {{apiKey}}
+
+### 4. Renovar póliza (incrementa canon y prima en +IPC, estado RENOVADA)
+POST {{base}}/polizas/1/renovar
+x-api-key: {{apiKey}}
+
+### 5. Renovar póliza cancelada -> 422
+POST {{base}}/polizas/3/renovar
+x-api-key: {{apiKey}}
+
+### 6. Agregar riesgo a póliza colectiva -> 201
+POST {{base}}/polizas/2/riesgos
+x-api-key: {{apiKey}}
+Content-Type: application/json
+
+{
+  "direccionInmueble": "Calle 80 # 10-20 Apto 402, Bogotá",
+  "arrendatario": "Ana Martínez",
+  "arrendador": "Luis Romero",
+  "canonMensual": 1200000
+}
+
+### 7. Agregar riesgo a póliza individual -> 422
+POST {{base}}/polizas/1/riesgos
+x-api-key: {{apiKey}}
+Content-Type: application/json
+
+{
+  "direccionInmueble": "Calle 80 # 10-20",
+  "arrendatario": "Ana Martínez",
+  "arrendador": "Luis Romero",
+  "canonMensual": 1200000
+}
+
+### 8. Cancelar un riesgo (recalcula la prima de la póliza)
+POST {{base}}/riesgos/4/cancelar
+x-api-key: {{apiKey}}
+
+### 9. Cancelar póliza (cancela todos sus riesgos)
+POST {{base}}/polizas/2/cancelar
+x-api-key: {{apiKey}}
+
+### 10. Mock del CORE
+POST {{base}}/core-mock/evento
+x-api-key: {{apiKey}}
+Content-Type: application/json
+
+{
+  "evento": "ACTUALIZACION",
+  "polizaId": 555
+}
+
+### 11. Sin x-api-key -> 401
+GET {{base}}/polizas

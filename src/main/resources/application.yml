@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: polizas-api
+  datasource:
+    url: jdbc:h2:mem:polizasdb
+    username: sa
+    password:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+# Seguridad mínima: header obligatorio x-api-key (se puede sobrescribir con la variable API_KEY)
+security:
+  api-key: ${API_KEY:123456}
+
+polizas:
+  # IPC (%) aplicado al canon en cada renovación
+  ipc: 5.20
+  core:
+    url: http://localhost:${server.port}/core-mock/evento
+    timeout-ms: 2000
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    com.prueba.polizas: INFO

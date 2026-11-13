@@ -1,0 +1,35 @@
+package com.prueba.polizas.dto;
+
+import com.prueba.polizas.domain.EstadoRiesgo;
+import com.prueba.polizas.domain.Riesgo;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+public record RiesgoResponse(
+        Long id,
+        Long polizaId,
+        String direccionInmueble,
+        String arrendatario,
+        String arrendador,
+        BigDecimal canonMensual,
+        BigDecimal prima,
+        EstadoRiesgo estado,
+        LocalDate fechaInclusion,
+        LocalDate fechaCancelacion
+) {
+    public static RiesgoResponse from(Riesgo riesgo) {
+        return new RiesgoResponse(
+                riesgo.getId(),
+                riesgo.getPoliza().getId(),
+                riesgo.getDireccionInmueble(),
+                riesgo.getArrendatario(),
+                riesgo.getArrendador(),
+                riesgo.getCanonMensual(),
+                riesgo.getPrima(),
+                riesgo.getEstado(),
+                riesgo.getFechaInclusion(),
+                riesgo.getFechaCancelacion()
+        );
+    }
+}
